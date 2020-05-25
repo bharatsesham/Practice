@@ -7,3 +7,7 @@ Sample Repository to Practice Coding.
     
     
 ![Alt text](https://github.com/bharatsesham/Practice/blob/master/media/FST_Words_to_Numbers.png?raw=true "Title")
+
+1b. FST to convert Pinyin words to numbers between 0 and 100 (_pinyin_to_number_fst.pl_)
+
+<img src="https://github.com/bharatsesham/Practice/blob/master/media/FST_Pinyin_to_Numbers.png" align="right">
