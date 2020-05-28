@@ -22,3 +22,10 @@ Sample Repository to Practice Coding.
     
 _Sample Parse:_
 <img src="https://github.com/bharatsesham/Practice/blob/master/media/cfg.png" align="middle">
+
+1e. Generating all available parse trees for a given sentence with a defined grammar (_sentence_parsing.py_). 
+
+_Sample Parses:_
+<img src="https://github.com/bharatsesham/Practice/blob/master/media/sentence_parsing.png" align="middle">
+
+Total Parses for the sentence "I put the block in the box on the table in the hallway outside the bedroom near the stairs by the window." are 296. 
