@@ -15,3 +15,10 @@ Sample Repository to Practice Coding.
 1c. Eliza Chatbot Example (_basic_eliza_chatbot.py_).
 
 <img src="https://github.com/bharatsesham/Practice/blob/master/media/Eliza_chatbot_example.png" align="middle">
+
+1d. Simple CFG with First Order Logic to parse a sentence (_cfg_sentense_parse.py_). 
+
+    Sentence: "A detective that Sam was arrested by interviewed every male waiter in the bar."
+    
+_Sample Parse:_
+<img src="https://github.com/bharatsesham/Practice/blob/master/media/cfg.png" align="middle">
