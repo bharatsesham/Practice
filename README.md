@@ -29,3 +29,7 @@ _Sample Parses:_
 <img src="https://github.com/bharatsesham/Practice/blob/master/media/sentence_parsing.png" align="middle">
 
 Total Parses for the sentence "I put the block in the box on the table in the hallway outside the bedroom near the stairs by the window." are 296. 
+
+### 2. Spark
+
+2a. Spark implementation of Term-Document Frequency to predict Movie Gernes (_termdocumentmatrix.py_). 
