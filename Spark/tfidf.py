@@ -2,13 +2,12 @@ import re
 import os
 from pyspark.ml.classification import LogisticRegression
 from pyspark.ml.classification import LogisticRegressionModel
-
+from pyspark.ml.feature import HashingTF, IDF
 from pyspark.ml.feature import Tokenizer
 from pyspark.sql import SQLContext
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import lit, udf, col
 from pyspark.sql.types import *
-from pyspark.ml.feature import CountVectorizer
 
 sc = SparkSession.builder \
     .master('local[*]') \
@@ -62,6 +61,7 @@ def genre_lst():
         genres.append(row['genre'])
     return genres
 
+
 # Cleaning Text - Postprocessing.
 clean_text_using_udf = udf(lambda x: clean_text(x), StringType())
 new_df = df.select(
@@ -74,7 +74,6 @@ remove_stopwords_from_plot = udf(lambda x: remove_stopwords(x), StringType())
 df_with_stop_words_removed = new_df.select(
     *[remove_stopwords_from_plot(column).alias('plot') if column == 'plot' else column for column in df.columns])
 
-# Process the genre name's
 genre_list =[]
 for genre in genre_lst():
   genre = genre.replace(" ", "_")
@@ -91,15 +90,18 @@ for genre in genre_list:
                                                                        df_with_stop_words_removed[
                                                                            "genre_" + genre_name].cast(IntegerType()))
 
-
-# Tokenizer
+# Tokenizer and Hashing
 tokenizer = Tokenizer(inputCol="plot", outputCol="word_plot")
 wordsData = tokenizer.transform(df_with_stop_words_removed)
 
-# CountVectorizer
-cv = CountVectorizer(inputCol="word_plot", outputCol="features", vocabSize=3, minDF=2.0)
-model = cv.fit(wordsData)
-featurizedData = model.transform(wordsData)
+# HashingTF
+hashingTF = HashingTF(numFeatures=5000, inputCol="word_plot", outputCol="rawFeatures")
+featurizedData = hashingTF.transform(wordsData)
+
+#TF-IDF
+idf = IDF(inputCol="rawFeatures", outputCol="features")
+idfModel = idf.fit(featurizedData)
+rescaledData = idfModel.transform(featurizedData)
 
 # Applying on Test Data
 test_df = (sqlContext.read
@@ -113,36 +115,39 @@ test_df_with_stop_words_removed = test_new_df.select(
     *[remove_stopwords_from_plot(column).alias('plot') if column == 'plot' else column for column in
       test_new_df.columns])
 
-# Tokenizer on Test Data
 test_tokenizer = Tokenizer(inputCol="plot", outputCol="word_plot")
 test_wordsData = test_tokenizer.transform(test_df_with_stop_words_removed)
 
-# CountVectorizer on Test Data
-cv = CountVectorizer(inputCol="word_plot", outputCol="features", vocabSize=3, minDF=2.0)
-model = cv.fit(test_wordsData)
-test_featurizedData = model.transform(test_wordsData)
+# Hashing TF on Test
+test_hashingTF = HashingTF(numFeatures=5000, inputCol="word_plot", outputCol="rawFeatures")
+test_featurizedData = test_hashingTF.transform(test_wordsData)
 
-if os.path.exists("_model_part1/"):
+#TF-IDF on Test
+test_idf = IDF(inputCol="rawFeatures", outputCol="features")
+test_idfModel = test_idf.fit(test_featurizedData)
+test_rescaledData = test_idfModel.transform(test_featurizedData)
+
+if os.path.exists("_model_part2/"):
     test_predictions = []
     for i in range(0, len(genre_list)):
         genre_name = genre_list[i].replace(" ", "_")
-        model_load = LogisticRegressionModel.load("_model_part1/model_"+genre_name)
-        predictions = model_load.transform(test_featurizedData)
+        model_load = LogisticRegressionModel.load("_model_part2/model_"+genre_name)
+        predictions = model_load.transform(test_rescaledData)
         pred = predictions.select(col("prediction").alias("prediction_" + genre_name), col('movie_id'))
         test_predictions.append(pred)
 else:
     test_predictions = []
-    train = featurizedData
+    train = rescaledData
     for i in range(0, len(genre_list)):
         genre_name = genre_list[i].replace(" ", "_")
         lr = LogisticRegression(maxIter=1000, featuresCol='features', labelCol='genre_' + genre_name)
         model = lr.fit(train)
-        model.save(r"_model_part1/model_"+genre_name)
-        predictions = model.transform(test_featurizedData)
+        model.save(r"_model_part2/model_"+genre_name)
+        predictions = model.transform(test_rescaledData)
         pred = predictions.select(col("prediction").alias("prediction_" + genre_name), col('movie_id'))
         test_predictions.append(pred)
 
-test_data = test_featurizedData
+test_data = test_rescaledData
 for pred in test_predictions:
     test_data = test_data.join(pred, how='inner', on=['movie_id'])
 
@@ -154,4 +159,4 @@ for genre in genre_list:
 test_data.registerTempTable("test_sql")
 test_pred = sqlContext.sql("SELECT movie_id, CONCAT(REPLACE(prediction_Drama,'.0',' '),REPLACE(prediction_Comedy,'.0',' '),REPLACE(prediction_Romance_Film,'.0',' '),REPLACE(prediction_Thriller,'.0',' '),REPLACE(prediction_Action,'.0',' '),REPLACE(prediction_World_cinema,'.0',' '),REPLACE(prediction_Crime_Fiction,'.0',' '),REPLACE(prediction_Horror,'.0',' '),REPLACE(prediction_Black_and_white,'.0',' '),REPLACE(prediction_Indie,'.0',' '),REPLACE(prediction_Action_Adventure,'.0',' '),REPLACE(prediction_Adventure,'.0',' '),REPLACE(prediction_Family_Film,'.0',' '),REPLACE(prediction_Short_Film,'.0',' '),REPLACE(prediction_Romantic_drama,'.0',' '),REPLACE(prediction_Animation,'.0',' '),REPLACE(prediction_Musical,'.0',' '),REPLACE(prediction_Science_Fiction,'.0',' '),REPLACE(prediction_Mystery,'.0',' '),REPLACE(prediction_Romantic_comedy,'.0',' ')) AS predictions FROM test_sql")
 test_pred.show()
-test_pred.coalesce(1).write.csv('final_predictions_CountVectorizer.csv',header=True)
+test_pred.coalesce(1).write.csv('final_predictions_TFIDF.csv',header=True)
