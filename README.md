@@ -37,3 +37,10 @@ Total Parses for the sentence "I put the block in the box on the table in the ha
 2b. Spark implementation of TFIDF to predict Movie Gernes with an increased accuracy (_tfidf.py_). 
 
 2c. Spark implementation of Word2Vec to predict Movie Gernes with best accuracy out of the three methods implemented (_word2vec.py_). 
+
+Sample Preprocessed Data:
+<img src="https://github.com/bharatsesham/Practice/blob/master/media/preprocessed_spark_data.png" align="middle">
+
+Sample Processed Data:
+<img src="https://github.com/bharatsesham/Practice/blob/master/media/processed_spark_data.png" align="middle">
+
