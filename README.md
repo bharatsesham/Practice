@@ -33,3 +33,7 @@ Total Parses for the sentence "I put the block in the box on the table in the ha
 ### 2. Spark
 
 2a. Spark implementation of Term-Document Frequency to predict Movie Gernes (_termdocumentmatrix.py_). 
+
+2b. Spark implementation of TFIDF to predict Movie Gernes with an increased accuracy (_tfidf.py_). 
+
+2c. Spark implementation of Word2Vec to predict Movie Gernes with best accuracy out of the three methods implemented (_word2vec.py_). 
