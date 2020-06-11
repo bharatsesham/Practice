@@ -48,4 +48,17 @@ Sample Processed Data:
 
 Sample Output Format:
 
-<img src="https://github.com/bharatsesham/Practice/blob/master/media/sample_spark_output.png" align="left">
+<img src="https://github.com/bharatsesham/Practice/blob/master/media/sample_spark_output.png" align="left"><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+### 3. Machine Learning
+
+Grid Search
+<img src="https://github.com/bharatsesham/Practice/blob/master/media/Grid%20Search.png" align="left">
+
+
+Confusion Matrix
+<img src="https://github.com/bharatsesham/Practice/blob/master/media/Confusion%20Matrix.png" align="left">
+
+
+
