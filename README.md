@@ -55,7 +55,7 @@ Sample Output Format:
 
 Grid Search
 <img src="https://github.com/bharatsesham/Practice/blob/master/media/Grid%20Search.png" align="left">
-
+<br /> <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
 
 Confusion Matrix
 <img src="https://github.com/bharatsesham/Practice/blob/master/media/Confusion%20Matrix.png" align="left">
