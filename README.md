@@ -59,6 +59,22 @@ Grid Search
 
 Confusion Matrix
 <img src="https://github.com/bharatsesham/Practice/blob/master/media/Confusion%20Matrix.png" align="left">
+<br />
+Results on the Dataset:
+
+Accuracy of KNN: 98.779296875<br />
+Accuracy of Random Forest: 94.6533203125<br />
+Kmeans function has been implemented and the clusters are stored in the variable k_mean_clusters<br />
+Dimensions reduced to after applying PCA: 10<br />
+WCSS Value: 4187.214989574909<br />
+Accuracy of SVM using Scikit:  97.6806640625<br />
+Accuracy of Logistic using Scikit:  90.19775390625<br />
+Accuracy of Decision Tree using Scikit:  87.51220703125<br />
+Accuracy of KNN using Scikit:  98.53515625<br />
+Accuracy of the ensembled model using voting classifier in Scikit:  97.27783203125<br />
+The sample precision value for logistic regression:  0.902453543374596<br />
+The sample recall value for logistic regression: 0.9031051778573826<br />
+Time:  1929.2531438300002<br />
 
 
 
